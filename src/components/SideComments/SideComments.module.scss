@@ -1,0 +1,27 @@
+.commentsTitle {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.commentInfo {
+  display: flex;
+  margin-bottom: 10px;
+}
+.commentImg {
+  width: 150px;
+}
+
+.root {
+
+}
+
+.rotated {
+  width: 100px;
+  transform: rotate(-90deg) translateX(-50px);
+  transform-origin: right;
+  svg {
+    transform: rotate(270deg);
+  }
+}

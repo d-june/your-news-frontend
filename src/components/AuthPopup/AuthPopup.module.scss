@@ -1,0 +1,22 @@
+.popupTitle {
+  font-weight: bold;
+}
+
+.popupContent {
+  button {
+    margin-bottom: 10px;
+    position: relative;
+    svg {
+      position: absolute;
+      left: 10px;
+      width: 22px;
+      height: 22px;
+    }
+  }
+}
+
+.bottomButtons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}

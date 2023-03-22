@@ -1,0 +1,42 @@
+.link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  line-height: 26px;
+  padding: 20px 0 20px 20px;
+  font-weight: 600;
+  transition: all 0.3s ease-in-out 0s;
+}
+
+.activeLink {
+  position: relative;
+  gap: 53px;
+  animation-duration: 0.5s;
+  animation-name: slidein;
+  &::before {
+    content: '';
+    position: absolute;
+    width: 80px;
+    height: 50px;
+    top: 7px;
+    left: 0px;
+    background: #F9D44A;
+    border-radius: 0px 31.5px 31.5px 0px;
+    z-index: -1;
+    animation-duration: 0.5s;
+    animation-name: slidein;
+  }
+}
+
+
+@keyframes slidein {
+  from {
+    left: -10%;
+    gap: 14px;
+  }
+
+  to {
+    left: 0;
+    gap: 53px;
+  }
+}

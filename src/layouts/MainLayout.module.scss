@@ -1,0 +1,9 @@
+.wrapper {
+  display: grid;
+  grid-template-columns: 200px 1fr 400px;
+  gap: 60px;
+}
+
+.rightSide {
+  justify-self: flex-end;
+}
