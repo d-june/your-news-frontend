@@ -4,8 +4,14 @@ import Header from "@/components/Header/Header";
 import { theme } from "@/theme";
 import { ThemeProvider } from "@mui/material";
 import Head from "next/head";
+import { Provider } from "react-redux";
+import { store, wrapper } from "@/redux/store";
+import { GetServerSideProps } from "next";
+import { parseCookies } from "nookies";
+import { UserApi } from "@/services/api";
+import { setUserData } from "@/redux/slices/user";
 
-export default function App({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
@@ -31,3 +37,25 @@ export default function App({ Component, pageProps }: AppProps) {
     </>
   );
 }
+
+App.getInitialProps = wrapper.getInitialAppProps(
+  (store) =>
+    async ({ ctx, Component }) => {
+      try {
+        const { authToken } = parseCookies(ctx);
+        const userData = await UserApi.getMe(authToken);
+        store.dispatch(setUserData(userData));
+      } catch (err) {
+        console.log(err);
+      }
+      return {
+        pageProps: {
+          ...(Component.getInitialProps
+            ? await Component.getInitialProps({ ...ctx, store })
+            : {}),
+        },
+      };
+    }
+);
+
+export default wrapper.withRedux(App);

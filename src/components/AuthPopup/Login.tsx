@@ -1,32 +1,59 @@
-import React, { FC } from "react";
-import { Button, TextField } from "@mui/material";
+import React, { FC, useState } from "react";
+import { Alert, Button, TextField } from "@mui/material";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoginFormSchema } from "@/components/utils/schemas/formsValidation";
 import FormField from "@/components/FormField";
 import styles from "@/components/AuthPopup/AuthPopup.module.scss";
+import { CreateUserDto, LoginDto } from "@/services/api/types";
+import { UserApi } from "@/services/api";
+import { setCookie } from "nookies";
+import { useAppDispatch } from "@/redux/hooks";
+import { setUserData } from "@/redux/slices/user";
 
 interface LoginFormProps {
   onClickRegister: () => void;
 }
 const Login: FC<LoginFormProps> = ({ onClickRegister }) => {
+  const dispatch = useAppDispatch();
+  const [errorMessage, setErrorMessage] = useState("");
   const form = useForm({
     mode: "onSubmit",
     resolver: yupResolver(LoginFormSchema),
   });
 
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = async (dto: LoginDto) => {
+    try {
+      const data = await UserApi.login(dto);
+      setCookie(null, "authToken", data.token, {
+        maxAge: 30 * 24 * 60 * 60,
+        path: "/",
+      });
+      setErrorMessage("");
+      dispatch(setUserData(data));
+    } catch (err) {
+      console.warn("Ошибка при регистрации", err);
+      if (err.response) {
+        setErrorMessage(err.response.data.message);
+      }
+    }
+  };
 
   return (
     <div>
       <FormProvider {...form}>
-        <div className={styles.popupFields}>
-          <FormField name="email" label="Email" />
-          <FormField name="password" label="Пароль" />
-        </div>
         <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className={styles.popupFields}>
+            <FormField name="email" label="Email" />
+            <FormField name="password" label="Пароль" />
+            {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+          </div>
           <div className={styles.popupBottom}>
-            <Button type="submit" variant="contained">
+            <Button
+              disabled={form.formState.isSubmitting}
+              type="submit"
+              variant="contained"
+            >
               Войти
             </Button>
             <Button onClick={onClickRegister} variant="outlined">
