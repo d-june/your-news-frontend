@@ -52,9 +52,14 @@ const Header = () => {
         <IconButton className={styles.iconButton}>
           <NotificationsNoneOutlinedIcon />
         </IconButton>
-        <div onClick={openAuthDialog}>
+        <Button
+          variant="contained"
+          onClick={openAuthDialog}
+          className={styles.headerLogin}
+          size="large"
+        >
           <AccountCircleOutlinedIcon /> Войти
-        </div>
+        </Button>
         {/*<Link href="#">*/}
         {/*  <Avatar*/}
         {/*    */}

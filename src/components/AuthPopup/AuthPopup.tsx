@@ -13,6 +13,9 @@ import {
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import styles from "./AuthPopup.module.scss";
+import Main from "@/components/AuthPopup/Main";
+import Login from "@/components/AuthPopup/Login";
+import Register from "@/components/AuthPopup/Register";
 
 interface AuthPopupProps {
   onClose: () => void;
@@ -21,72 +24,36 @@ interface AuthPopupProps {
 }
 
 const AuthPopup: FC<AuthPopupProps> = ({ onClose, open, handleClose }) => {
-  const [formType, setFormType] = useState<"main" | "email">("main");
+  const [formType, setFormType] = useState<"main" | "login" | "register">(
+    "main"
+  );
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
-      <DialogTitle className={styles.popupTitle} align="center">
-        {formType === "main" ? (
-          "Войти"
-        ) : (
-          <Typography onClick={() => setFormType("main")}>
-            <ArrowBackIcon />
-            Войти через почту
-          </Typography>
-        )}
-      </DialogTitle>
       <DialogContent>
+        <DialogTitle variant="h4" align="center">
+          {formType === "main" ? (
+            "Войти"
+          ) : (
+            <Typography
+              variant="h5"
+              className={styles.popupTitleAuthorization}
+              onClick={() => setFormType("main")}
+            >
+              <ArrowBackIcon />к авторизации
+            </Typography>
+          )}
+        </DialogTitle>
         {formType === "main" && (
-          <DialogContentText className={styles.popupContent}>
-            <div>
-              <Button fullWidth variant="outlined">
-                ВКонтакте
-              </Button>
-              <Button fullWidth variant="outlined">
-                Google
-              </Button>
-              <Button
-                onClick={() => setFormType("email")}
-                fullWidth
-                variant="outlined"
-              >
-                Через почту
-              </Button>
-            </div>
-            <div className={styles.bottomButtons}>
-              <Button variant="outlined">Twitter</Button>
-              <Button variant="outlined">Facebook</Button>
-              <Button variant="outlined">Apple</Button>
-            </div>
-          </DialogContentText>
+          <Main onClickLoginEmail={() => setFormType("login")} />
         )}
-        {formType === "email" && (
-          <div>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="email"
-              label="Email"
-              type="email"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              autoFocus
-              margin="dense"
-              id="password"
-              label="Пароль"
-              type="password"
-              fullWidth
-              variant="standard"
-            />
-            <Button variant="contained">Войти</Button>
-          </div>
+        {formType === "login" && (
+          <Login onClickRegister={() => setFormType("register")} />
+        )}
+        {formType === "register" && (
+          <Register onClickLoginEmail={() => setFormType("login")} />
         )}
       </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-      </DialogActions>
     </Dialog>
   );
 };
