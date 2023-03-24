@@ -1,0 +1,15 @@
+.form {
+  position: relative;
+  border: 1px solid;
+}
+
+.fieldRoot {
+  &:after, &:before {
+    display: none;
+  }
+  cursor: pointer !important;
+}
+
+.addButton {
+  margin-top: 15px;
+}

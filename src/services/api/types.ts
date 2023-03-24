@@ -25,6 +25,7 @@ export type PostItem = {
   tags: string | null;
   id: number;
   views: number;
+  user: ResponseUser;
   createdAt: string;
   updatedAt: string;
 };
