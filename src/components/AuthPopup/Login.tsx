@@ -6,10 +6,11 @@ import { LoginFormSchema } from "@/components/utils/schemas/formsValidation";
 import FormField from "@/components/FormField";
 import styles from "@/components/AuthPopup/AuthPopup.module.scss";
 import { CreateUserDto, LoginDto } from "@/services/api/types";
-import { UserApi } from "@/services/api";
+import { UserApi } from "@/services/api/user";
 import { setCookie } from "nookies";
 import { useAppDispatch } from "@/redux/hooks";
 import { setUserData } from "@/redux/slices/user";
+import { Api } from "@/services/api/index";
 
 interface LoginFormProps {
   onClickRegister: () => void;
@@ -24,8 +25,8 @@ const Login: FC<LoginFormProps> = ({ onClickRegister }) => {
 
   const onSubmit = async (dto: LoginDto) => {
     try {
-      const data = await UserApi.login(dto);
-      setCookie(null, "authToken", data.token, {
+      const data = await Api().user.login(dto);
+      setCookie(null, "_token", data.token, {
         maxAge: 30 * 24 * 60 * 60,
         path: "/",
       });

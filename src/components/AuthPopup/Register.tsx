@@ -10,7 +10,7 @@ import {
 import FormField from "@/components/FormField";
 import styles from "@/components/AuthPopup/AuthPopup.module.scss";
 import { CreateUserDto } from "@/services/api/types";
-import { UserApi } from "@/services/api";
+import { UserApi } from "@/services/api/user";
 
 interface RegisterProps {
   onClickLoginEmail: () => void;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./Header.module.scss";
 import Link from "next/link";
 import { Avatar, Button, IconButton } from "@mui/material";
@@ -20,6 +20,12 @@ const Header = () => {
   const closeAuthDialog = () => {
     setAuthVisible(false);
   };
+
+  useEffect(() => {
+    if (authVisible && userData) {
+      setAuthVisible(false);
+    }
+  }, [authVisible, userData]);
 
   return (
     <header className={styles.headerWrapper}>

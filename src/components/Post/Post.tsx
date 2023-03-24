@@ -13,7 +13,14 @@ import Link from "next/link";
 import PostActions from "@/components/PostActions/PostActions";
 import styles from "./Post.module.scss";
 
-const Post: FC = () => {
+interface PostProps {
+  id: number;
+  title: string;
+  description: string;
+  imageUrl?: string;
+}
+
+const Post: FC<PostProps> = ({ id, title, description, imageUrl }) => {
   return (
     <>
       <Card sx={{ maxWidth: 800 }}>
@@ -24,14 +31,9 @@ const Post: FC = () => {
         />
         <CardContent>
           <Typography variant="h5">
-            <Link href="/news/">Кот пришел посмотреть на вас</Link>
+            <Link href={`/news/${id}`}>{title}</Link>
           </Typography>
-          <Typography className={styles.postText}>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam
-            dolorem et fugiat molestiae placeat! Autem dignissimos iste laborum
-            quidem quod. Ad deserunt exercitationem itaque perspiciatis,
-            praesentium quidem rem? Autem, voluptate.
-          </Typography>
+          <Typography className={styles.postText}>{description}</Typography>
         </CardContent>
         <PostActions />
       </Card>

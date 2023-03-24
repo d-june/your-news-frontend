@@ -4,12 +4,14 @@ import Header from "@/components/Header/Header";
 import { theme } from "@/theme";
 import { ThemeProvider } from "@mui/material";
 import Head from "next/head";
-import { Provider } from "react-redux";
 import { store, wrapper } from "@/redux/store";
 import { GetServerSideProps } from "next";
 import { parseCookies } from "nookies";
-import { UserApi } from "@/services/api";
+import { UserApi } from "@/services/api/user";
 import { setUserData } from "@/redux/slices/user";
+import { Api } from "@/services/api";
+import { debug } from "util";
+import { Provider } from "react-redux";
 
 function App({ Component, pageProps }: AppProps) {
   return (
@@ -42,18 +44,21 @@ App.getInitialProps = wrapper.getInitialAppProps(
   (store) =>
     async ({ ctx, Component }) => {
       try {
-        const { authToken } = parseCookies(ctx);
-        const userData = await UserApi.getMe(authToken);
+        const userData = await Api(ctx).user.getMe();
         store.dispatch(setUserData(userData));
       } catch (err) {
+        if (ctx.asPath === "/write") {
+          ctx.res?.writeHead(302, {
+            Location: "/403",
+          });
+          ctx.res?.end();
+        }
         console.log(err);
       }
       return {
-        pageProps: {
-          ...(Component.getInitialProps
-            ? await Component.getInitialProps({ ...ctx, store })
-            : {}),
-        },
+        pageProps: Component.getInitialProps
+          ? await Component.getInitialProps({ ...ctx, store })
+          : {},
       };
     }
 );
