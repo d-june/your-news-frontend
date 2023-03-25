@@ -2,8 +2,8 @@ import MainLayout from "@/layouts/MainLayout";
 import { GetServerSideProps, NextPage } from "next";
 import { Api } from "@/services/api";
 import { PostItem } from "@/services/api/types";
-import FullPost from "@/FullPost/FullPost";
-import PostComments from "@/PostComments/PostComments";
+import FullPost from "@/components/FullPost/FullPost";
+import PostComments from "@/components/PostComments/PostComments";
 
 interface FullPostPageProps {
   post: PostItem;
@@ -13,7 +13,7 @@ const FullPostPage: NextPage<FullPostPageProps> = ({ post }) => {
     <MainLayout contentFullWidth>
       <div>
         <FullPost title={post.title} blocks={post.body} />
-        {/*<PostComments items={comments} />*/}
+        <PostComments postId={post.id} />
       </div>
     </MainLayout>
   );

@@ -1,51 +1,22 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Link from "next/link";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import styles from "./SideComments.module.scss";
 import clsx from "clsx";
-import { Card, CardContent, CardMedia, Typography } from "@mui/material";
-
-export const comments = [
-  {
-    id: 0,
-    user: {
-      id: 1,
-      fullname: "Вася Пупкин",
-      avatarUrl:
-        "https://media.istockphoto.com/id/454995205/photo/white-kitten.jpg?b=1&s=170667a&w=0&k=20&c=4zldIT44NhRFHTRhq4kxFA-I_MfuOfSs_f_4wdD54E4=",
-    },
-    text: "Какой-то текст подлиннее немного текст",
-    post: {
-      title: "Какая у вас дома ванна?",
-    },
-    createdAt: new Date().toString(),
-  },
-  {
-    id: 1,
-    user: {
-      id: 2,
-      fullname: "Вася Пупкин",
-      avatarUrl:
-        "https://media.istockphoto.com/id/454995205/photo/white-kitten.jpg?b=1&s=170667a&w=0&k=20&c=4zldIT44NhRFHTRhq4kxFA-I_MfuOfSs_f_4wdD54E4=",
-    },
-    text: "Какой-то текст подлиннее немного текст",
-    post: {
-      title: "Какая у вас дома ванна?",
-    },
-    createdAt: new Date().toString(),
-  },
-];
+import {
+  Avatar,
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+} from "@mui/material";
+import { Api } from "@/services/api";
+import { CommentItemType, PostItem, ResponseUser } from "@/services/api/types";
 
 interface CommentItemProps {
-  user: {
-    id: number;
-    fullname: string;
-    avatarUrl: string;
-  };
+  user: ResponseUser;
   text: string;
-  post: {
-    title: string;
-  };
+  post: PostItem;
 }
 
 export const CommentItem: FC<CommentItemProps> = ({ user, text, post }) => {
@@ -53,17 +24,18 @@ export const CommentItem: FC<CommentItemProps> = ({ user, text, post }) => {
     <Card sx={{ maxWidth: 400 }} className={styles.commentInfo}>
       <CardContent>
         <div>
-          <CardMedia
-            component="img"
-            alt="avatar"
-            height="100"
-            image={user.avatarUrl}
-            className={styles.commentImg}
-          />
-          <Typography variant="overline">{user.fullname}</Typography>
+          <Avatar>{user.fullName[0]}</Avatar>
+          {/*<CardMedia*/}
+          {/*  component="img"*/}
+          {/*  alt="avatar"*/}
+          {/*  height="100"*/}
+          {/*  image={user.avatarUrl}*/}
+          {/*  className={styles.commentImg}*/}
+          {/*/>*/}
+          <Typography variant="overline">{user.fullName}</Typography>
         </div>
         <Typography>{text}</Typography>
-        <Link href="news/1">
+        <Link href={`/news/${post.id}`}>
           <Typography variant="h6">{post.title}</Typography>
         </Link>
       </CardContent>
@@ -73,6 +45,17 @@ export const CommentItem: FC<CommentItemProps> = ({ user, text, post }) => {
 
 export const SideComments = () => {
   const [visible, setVisible] = useState(true);
+  const [comments, setComments] = useState<CommentItemType[]>([]);
+  useEffect(() => {
+    (async () => {
+      try {
+        const comments = await Api().comment.getAllComments();
+        setComments(comments);
+      } catch (err) {
+        console.warn("Fetch comments", err);
+      }
+    })();
+  }, []);
   const toggleVisible = () => {
     setVisible(!visible);
   };

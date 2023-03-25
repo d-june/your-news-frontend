@@ -14,6 +14,8 @@ export type ResponseUser = {
   email: string;
   fullName: string;
   id: number;
+  commentsCount?: number;
+  comments?: CommentItemType[];
   token: string;
   updatedAt: string;
 };
@@ -25,6 +27,15 @@ export type PostItem = {
   tags: string | null;
   id: number;
   views: number;
+  user: ResponseUser;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type CommentItemType = {
+  id: number;
+  text: string;
+  post: PostItem;
   user: ResponseUser;
   createdAt: string;
   updatedAt: string;

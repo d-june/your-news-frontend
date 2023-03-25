@@ -1,7 +1,14 @@
 import React, { useEffect } from "react";
 import styles from "./Header.module.scss";
 import Link from "next/link";
-import { Avatar, Button, IconButton } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  IconButton,
+  List,
+  ListItem,
+  Paper,
+} from "@mui/material";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import AuthPopup from "@/components/AuthPopup/AuthPopup";

@@ -15,6 +15,11 @@ const menu = [
     icon: <LoyaltyIcon />,
     path: "/subscribes",
   },
+  {
+    text: "Пользователи",
+    icon: <LoyaltyIcon />,
+    path: "/users",
+  },
 ];
 
 const LeftMenu: FC = () => {
